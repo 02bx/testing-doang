@@ -63,8 +63,8 @@ RUN \
 
 FROM nginx:1.17.7@sha256:89a42c3ba15f09a3fbe39856bddacdf9e94cd03df7403cad4fc105088e268fc9
 COPY --from=collectstatic /app/static/ /usr/share/nginx/html/static/
-COPY wsgi_params nginx/nginx.conf /etc/nginx/
-COPY docker/entrypoint-nginx.sh $HOME/*.cer $HOME/*.crt $HOME/*.key /
+COPY wsgi_params nginx/nginx.conf nginx/*.cer nginx/*.crt nginx/*.key /etc/nginx/
+COPY docker/entrypoint-nginx.sh /
 RUN \
   chmod -R g=u /var/cache/nginx && \
   chmod -R g=u /var/run && \
