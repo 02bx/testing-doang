@@ -1,0 +1,199 @@
+{% load get_system_setting %}
+{% load static from staticfiles %}
+{% load event_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+        | KRAKATAU | 
+        {% if request.session.dojo_breadcrumbs and not product_tab.tab %}
+            {% with request.session.dojo_breadcrumbs|last as last %}
+                {{ last.title }} |
+            {% endwith %}
+        {% elif product_tab.title %}
+          {{ product_tab.title }} |
+        {% endif %}
+    </title>
+    <link rel="shortcut icon" href="{% static "dojo/img/favicon.ico" %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+    <style type="text/css">
+        body {
+            color: #00aa13;
+            background: rgb(255, 254, 243);
+            font-family: 'Varela Round', sans-serif;
+        }
+        .form-control {
+            font-size: 16px;
+            transition: all 0.4s;
+            box-shadow: none;
+        }
+        .form-control:focus {
+            border-color: #5cb85c;
+        }
+        .form-control, .btn {
+            border-radius: 50px;
+            outline: none !important;
+        }
+        .header-img {
+            margin-bottom: 20px;
+            background: #242624;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 3px;
+        }
+        .header-img img {
+            align: center;
+        }
+        .signin-form {
+            width: 400px;
+            margin: 0 auto;
+            padding: 30px 0;
+            margin-top: 5%;
+        }
+        .signin-form form {
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background: #242624;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        .signin-form a {
+            color: #242624;
+        }    
+        .signin-form h2 {
+            text-align: center;
+            font-size: 34px;
+            margin: 10px 0 15px;
+        }
+        .signin-form .hint-text {
+            color: #999;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .signin-form .form-group {
+            margin-bottom: 20px;
+        }
+        .signin-form .btn {        
+            font-size: 18px;
+            line-height: 26px;        
+            font-weight: bold;
+            text-align: center;
+        }
+        .signin-form .small {
+            font-size: 13px;
+        }
+        .signup-btn {
+            text-align: center;
+            border-color: #5cb85c;
+            transition: all 0.4s;
+        }
+        .signup-btn:hover {
+            background: #5cb85c;
+            opacity: 0.8;
+        }
+        .or-seperator {
+            margin: 50px 0 15px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+        .or-seperator b {
+            padding: 0 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            text-align: center;
+            line-height: 40px;
+            background: #00aa13;
+            display: inline-block;
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            position: relative;
+            top: -22px;
+            z-index: 1;
+        }
+        .social-btn .btn {
+            color: #FFFFFF;
+            margin: 10px 0 0 30px;
+            font-size: 15px;
+            width: 55px;
+            height: 55px;
+            line-height: 38px;
+            border-radius: 50%;
+            font-weight: normal;
+            text-align: center;
+            border: none;
+            transition: all 0.4s;
+        }	
+        .social-btn .btn:first-child {
+            margin-left: 0;
+        }
+        .social-btn .btn:hover {
+            opacity: 0.8;
+        }
+        .social-btn .btn-primary {
+            background: #507cc0;
+        }
+        .social-btn .btn-info {
+            background: #64ccf1;
+        }
+        .social-btn .btn-danger {
+            background: #df4930;
+        }
+        .social-btn .btn i {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    {% for field in form.hidden_fields %}
+        {{ field }} 
+    {% endfor %}
+
+    {% load display_tags %}
+    <div class="header-img">
+            <img src="{% static "dojo/img/logo.png" %}" alt="GoMerchants Logo" width="340" />
+    </div>
+    <div class="signin-form">
+        <form method="POST"> {% csrf_token %}
+            <div align="center">
+                <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" title="Google">
+                    <img src="{% static "dojo/img/google-login.png" %}" alt="Login with GoJek email" width="240" />
+                </a>
+            </div>
+            <div class="or-seperator"><b>or</b></div>
+            <div class="form-group">
+                <input type="text" class="form-control input-lg" name="username" placeholder="Username" required="required">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control input-lg" id="id_password" name="password" placeholder="Password" required="required">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg btn-block signup-btn">Sign in</button>
+            </div>
+        </form>
+        <div class="text-center small">Need help? <a href="mailto:gomerchants-infosec@go-jek.com">Contact Infosec Team</a></div>
+    </div>
+
+<script src="{% static "dojo/js/jquery.slim.min.js" %}"></script>
+<script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+<script src="{% static "bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+<script src="{% static "dojo/js/index-non-top.js" %}"></script>
+
+</body>
+</html>
