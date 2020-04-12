@@ -68,7 +68,7 @@ COPY docker/entrypoint-nginx.sh /
 RUN \
   chmod -R g=u /var/cache/nginx && \
   chmod -R g=u /var/run && \
-  if [ -f /etc/nginx/*.key -o -f /etc/nginx/*.crt]; then chown 1001 /etc/nginx/*.key*.key /etc/nginx/*.crt; fi && \
+  chown 1001 /etc/nginx/star* && \
   true
 ENV \
   DD_UWSGI_PASS="uwsgi_server" \
